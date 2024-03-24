@@ -1,0 +1,426 @@
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}
+body{line-height:1}
+h1 {font-size: 1.5em;margin-bottom: 10px;}
+p{font-size: 1em;line-height: 1.3em;margin-bottom: 10px;}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
+nav ul{list-style:none}
+blockquote,q{quotes:none}
+blockquote:before,blockquote:after,q:before,q:after{content:none}
+a{margin:0;padding:0;font-size:100%;vertical-align:baseline;background:transparent}
+ins{background-color:#ff9;color:#000;text-decoration:none}
+mark{background-color:#ff9;color:#000;font-style:italic;font-weight:bold}
+del{text-decoration:line-through}
+abbr[title],dfn[title]{border-bottom:1px dotted;cursor:help}
+table{border-collapse:collapse;border-spacing:0}
+hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0}
+input,select{vertical-align:middle}
+iframe{border-radius: 5px;}
+
+#desktop {
+	font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-image: url(images/background_upscaled.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+	overflow: hidden;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.desk {
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    grid-column-gap: 1px;
+    grid-row-gap: 1px;
+    }
+    
+.window {
+    position: absolute;
+    border: 5px #c5c4c77e;
+    background: #c784ee6c;
+	border-radius: 10px;
+	z-index: 1000;
+}
+.window.closed {
+	display: none;
+}
+.window.minimizedWindow {
+	display: none;
+}
+.window.fullSizeWindow {
+    top: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    border-radius: none;
+    bottom: 50px !important;
+}
+.fullSizeWindow .ui-resizable-handle {
+	display: none;
+}
+.windowHeader {
+    background-color: #202020;
+    text-align: right;
+    border: 1px solid #cfcfcf25;
+    border-radius: 5px;
+    padding: 2px;
+    cursor: move;
+    height: 26px;
+    color: azure;
+}
+.activeWindow .windowHeader {
+    background-color: #202020e5;
+}
+.windowHeader > span {
+    display: inline-block;
+    cursor: pointer;
+    border: 1px solid #bbbbbb34;
+    font-size: 12px;
+    padding: 2px 10px;
+    font-family: "Arial Black", Gadget, sans-serif;
+    border-radius: 100px;
+    line-height: 20px;
+    width: auto;
+    height: auto;
+    position: relative;
+    overflow: hidden;
+}
+.windowHeader > span:hover {
+	background: rgba(255,255,255,0.3);
+}
+.windowHeader > span.winclose:hover {
+	background: #c94747;
+}
+.windowHeader > span > span {
+    display: inline-block;
+    height: 8px;
+    width: 10px;
+    position: absolute;
+    top: 6px;
+    left: 10px;
+}
+
+.winmaximize > span:nth-child(2) {
+	display: none;
+}
+.fullSizeWindow .winmaximize > span:nth-child(1) {
+	margin: 2px 0 0 -4px;
+}
+.fullSizeWindow .winmaximize > span:nth-child(2) {
+    display: inline-block;
+    top: 3px;
+    left: 12px;
+}
+.wincontent {
+    padding: 5px;
+    min-width: 400px;
+    min-height: 300px;
+    margin: 2px;
+	border-radius: 0 0 5px 5px;
+}
+.windowHeader > strong {
+    float: left;
+    margin: 0px 3px 0 10px;
+    line-height: 29px;
+    font-size: 17px;
+}
+.taskbarPanel {
+    display: inline-block;
+    border: 2px solid transparent; /* Borde transparente */
+    border-radius: 5px;
+    line-height: 24px;
+    margin: 1px 0 0 1px;
+    font-size: 17px;
+    padding: 0 5px;
+    background: none; /* Fondo transparente */
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff; /* Color de texto */
+    transition: background-color 0.3s, border-color 0.3s; /* Transiciones */
+}
+
+.taskbarPanel img {
+    width: 36px;
+    margin-top: 5px;
+    border-radius: 3px;
+}
+
+.taskbarPanel.activeTab {
+    background: #7000d8; /* Color de fondo activo */
+    border-color: #7000d8; /* Color del borde activo */
+}
+
+.taskbarPanel.minimizedTab {
+    background: #303030; /* Color de fondo minimizado */
+    border-color: #303030; /* Color del borde minimizado */
+}
+
+.taskbarPanel.minimizedTab:hover {
+    background: #404040; /* Color de fondo minimizado al pasar el mouse */
+    border-color: #404040; /* Color del borde minimizado al pasar el mouse */
+}
+
+.taskbarPanel.closed {
+    display: none;
+}
+
+#taskbar {
+    position: fixed; /* Cambiado a posición fija */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 48px; /* Altura aumentada */
+    border-top: 1px solid #ffffff2a;
+    background: #202020; /* Color de fondo */
+    color: #fff; /* Color de texto */
+    display: flex;
+    align-items: center;
+}
+
+#taskbar .taskbarPanel {
+    margin: 0 10px; /* Margen horizontal */
+}
+
+#clock {
+    position: absolute;
+    display: inline-block;
+    bottom: 10px;
+    right: 20px;
+    font-weight: bold;
+    font-size: 15px;
+    color: #30478c;
+}
+
+#clock .time {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#clock .date {
+    font-size: 14px;
+    position: relative;
+}
+
+#icons {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+    color: azure;
+    text-align: center;
+    line-height: 22px;
+    z-index: -1;
+}
+#icons a {
+    display: block;
+    cursor: pointer;
+    padding: 0;
+}
+#icons a:hover {
+	background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+}
+
+/* Estilo base para los iconos */
+.img-icon {
+    width: 46px; /* Ancho del icono */
+    height: 46px; /* Altura del icono */
+    border-radius: 10%;
+}
+
+
+/* Estilos para el menú desplegable */
+.taskbarPanel {
+    position: relative;
+}
+
+.dropdownMenu {
+    display: none;
+    position: absolute;
+    bottom: 100%; /* Mueve el menú desplegable hacia abajo */
+    left: 0;
+    width: 480px; /* Ancho del menú (dos columnas) */
+    background-color: #f0f0f0; /* Color de fondo similar al menú de inicio de Windows */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); /* Sombra similar al menú de inicio de Windows */
+    z-index: 3;
+    display: flex;
+    flex-wrap: wrap; /* Envuelve los elementos en múltiples líneas */
+    justify-content: space-between; /* Distribuye los elementos en dos columnas */
+}
+
+.menuHeader {
+    width: 100%;
+    padding: 10px;
+    background-color: #d3d3d3; /* Color de fondo para el encabezado */
+    border-bottom: 1px solid #ccc; /* Borde inferior */
+    box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
+    display: flex;
+    justify-content: center;
+}
+
+.menuTitle {
+    font-weight: bold;
+    color: #000;
+}
+
+.separator {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #ccc; /* Línea separadora entre el encabezado y los elementos del menú */
+    margin: 5px 0;
+}
+
+.dropdownMenu a {
+    width: calc(50% - 20px); /* Ancho de cada elemento en dos columnas */
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    box-sizing: border-box; /* Incluye el padding en el ancho total */
+}
+
+.dropdownMenu a:hover {
+    background-color: #eaeaea;
+}
+
+
+
+/* Estilos para el botón de menú */
+.menuButton {
+    background-color: transparent; /* Fondo transparente */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+    outline: none; /* Eliminar el contorno al hacer clic en el botón */
+    color: #d4c0e7; /* Color del texto */
+    font-size: 16px; /* Tamaño de la fuente */
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-style: oblique;
+    font-weight: 800;
+    padding: 4px 4px; /* Espacio interno */
+    margin-right: 5px; /* Margen derecho para separar del menú desplegable */
+}
+
+.menuButton:hover {
+    background-color: #adabab1c; /* Cambio de color al pasar el mouse */
+    border-radius: 100px;
+}
+
+
+/* Estilo del botón */
+.dropbtn {
+    background-color: #313131;
+    border-radius: 10px;
+    min-width: max-content;
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Estilo del contenedor del menú desplegable */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+    justify-content: right;
+  }
+  
+    
+  /* Estilo de los enlaces en el menú desplegable */
+  .dropdown-content {
+    display: none;
+    bottom: 100%;
+    position: absolute;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 3;
+    min-width: max-content;    
+}
+  
+  /* Estilo de los enlaces en el menú desplegable al pasar el mouse */
+  .dropdown-content a:hover {
+    background-color: #d67aec;
+    min-width: max-content;
+    border-radius: 3px;
+  }
+  
+  /* Mostrar el menú desplegable cuando se pasa el mouse sobre el botón */
+  .dropdown:hover .dropdown-content {
+    display: grid;
+    grid-template-columns: repeat(2, auto); /* Dos columnas */
+    grid-gap: 10px; /* Espacio entre elementos */
+  }
+  
+  /* Cambiar el color del botón cuando se pasa el mouse sobre él */
+  .dropdown:hover .dropbtn {
+    background-color: #c46ae777;
+  }
+
+/*Demo styles BEGIN*/
+#window0 {	top: 200px;	left: 725px;}
+#window1 {	top: 400px; left: 120px;}
+#window2 {	top: 250px; left: 300px;}
+#window3 {	top: 125px; left: 420px;}
+#window4 {	top: 125px; left: 420px;}
+#window5 {	top: 125px; left: 420px;}
+#window6 {	top: 125px; left: 420px;}
+#window7 {	top: 125px; left: 420px;}
+#window8 {	top: 125px; left: 420px;}
+#window9 {	top: 125px; left: 420px;}
+#window10 {	top: 125px; left: 420px;}
+#window11 {	top: 125px; left: 420px;}
+#window12 {	top: 125px; left: 420px;}
+#window13 {	top: 125px; left: 420px;}
+#window14 {	top: 125px; left: 420px;}
+#window15 {	top: 125px; left: 420px;}
+#window0 .wincontent {	width: 600px; height: 400px;	}
+#window1 .wincontent {	width: 1000px; height: 400px;	}
+#window2 .wincontent {	width: 1000px; height: 800px;	}
+#window3 .wincontent {	width: 1000px; height: 700px;	}
+#window4 .wincontent {	width: 1000px; height: 700px;	}
+#window5 .wincontent {	width: 1000px; height: 700px;	}
+#window6 .wincontent {	width: 1000px; height: 700px;	}
+#window7 .wincontent {	width: 1000px; height: 700px;	}
+#window8 .wincontent {	width: 1000px; height: 700px;	}
+#window9 .wincontent {	width: 1000px; height: 700px;	}
+#window10 .wincontent {	width: 1300px; height: 900px;	}
+#window11 .wincontent {	width: 1000px; height: 700px;	}
+#window12 .wincontent {	width: 1000px; height: 700px;	}
+#window13 .wincontent {	width: 1300px; height: 700px;	}
+#window14 .wincontent {	width: 1300px; height: 700px;	}
+#window15 .wincontent {	width: 1300px; height: 700px;	}
+
+
+
+@media screen and (max-width:960px){
+	#window0 {	left: 10px;	}
+	#window3 {	left: 50px;	}	
+}
+@media screen and (max-width:770px){
+	#window0 .wincontent {	width: 460px;	}
+	#window2 {	left: 100px;	}
+	#window1 {	top: 190px;	left: -5px;	}
+}
+@media screen and (max-width:540px){
+#window0 .wincontent {	width: 230px; height: 200px;	}
+#window3 .wincontent {
+    width: 275px;
+    height: auto;
+}
+#window3 {    top: 9px;    left: 10px;	}
+#window2 {    left: -118px;	}
+#window1 .wincontent {    width: auto;    height: 300px;	}
+}
+
+  
